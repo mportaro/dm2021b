@@ -6,12 +6,12 @@ require("data.table")
 require("parallel")
 require("rpart")
 
-#setwd( "M:\\" )
-setwd( "~/buckets/b1/crudo/" )
+setwd( "C:/Users/marcos.portaro/Google Drive/Data.Science/ITBA/05-Data.Mining/" )
+
 
 #Aqui van VEINTE semillas
-ksemillas  <- c(142297, 191507, 198839, 258707, 268091, 287047, 330557, 386333, 490619, 497239,
-                513319, 571019, 589187, 649141, 671651, 711811, 814937, 830923, 884069, 957041 )
+ksemillas  <- c(740011,740021,740023,740041,740053,740059,740087,740099,740123,740141,
+                740143,740153,740161,740171,740189,740191,740227,740237,740279,740287)
 
 #------------------------------------------------------------------------------
 
@@ -64,7 +64,7 @@ ArbolesMontecarlo  <- function( data, param, semillas )
                           semillas, 
                           MoreArgs= list( data, param), 
                           SIMPLIFY= FALSE,
-                          mc.cores= 5 )  #debe ser 1 si se tiene Windows
+                          mc.cores= 1 )  #debe ser 1 si se tiene Windows
 
   #devuelvo la primer ganancia y el promedio
   return( mean( unlist( ganancias ))  ) 
@@ -74,13 +74,13 @@ ArbolesMontecarlo  <- function( data, param, semillas )
 #cargo los datos donde voy a ENTRENAR el modelo
 dataset  <- fread("./datasetsOri/paquete_premium_202011.csv")
 
-#ganancia en Kaggle de param1  14.90453
+#ganancia en Kaggle de param1  14.90453   Gan=7999375
 param1 <- list( "cp"= -1,
                 "minsplit"=  200,
                 "minbucket"= 100,
                 "maxdepth"=    6 )
 
-#ganancia en Kaggle de param2  17.87127
+#ganancia en Kaggle de param2  17.87127   Gan=8234375
 param2 <- list( "cp"= -1,
                 "minsplit"=   50,
                 "minbucket"=  10,

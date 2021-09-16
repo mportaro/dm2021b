@@ -9,9 +9,9 @@ require("rlist")
 require("parallel")
 require("rpart")
 
-setwd( "M:\\" )
+setwd( "C:/Users/Administrator/Google Drive/Data.Science/ITBA/05-Data.Mining/" )
 
-ksemillas  <- c(102191, 200177, 410551, 552581, 892237) #reemplazar por las propias semillas
+ksemillas  <- c(320009, 320011, 320027, 320039, 320041) #reemplazar por las propias semillas
 
 #------------------------------------------------------------------------------
 

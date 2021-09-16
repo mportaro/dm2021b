@@ -20,7 +20,7 @@ require("mlrMBO")
 
 
 #defino la carpeta donde trabajo
-setwd( "~/buckets/b1/crudo/"  )
+setwd( "C:/Users/marcos.portaro/Google Drive/Data.Science/ITBA/05-Data.Mining/" )
 
 
 kexperimento  <- NA   #NA si se corre la primera vez, un valor concreto si es para continuar procesando
@@ -31,10 +31,10 @@ karch_aplicacion  <- "./datasetsOri/paquete_premium_202101.csv"
 kBO_iter    <-  150   #cantidad de iteraciones de la Optimizacion Bayesiana
 
 hs  <- makeParamSet(
-          makeIntegerParam("num.trees" ,        lower=  2L  , upper=  500L),  #la letra L al final significa ENTERO
-          makeIntegerParam("max.depth",         lower=  0L  , upper=   20L),  # 0 significa profundidad infinita
-          makeIntegerParam("min.node.size" ,    lower=  1L  , upper=  500L),
-          makeIntegerParam("mtry" ,             lower=  2L  , upper=   50L))
+  makeIntegerParam("num.trees" ,        lower=  2L  , upper=  500L),  #la letra L al final significa ENTERO
+  makeIntegerParam("max.depth",         lower=  0L  , upper=   20L),  # 0 significa profundidad infinita
+  makeIntegerParam("min.node.size" ,    lower=  1L  , upper=  500L),
+  makeIntegerParam("mtry" ,             lower=  2L  , upper=   50L))
 
 ksemilla_azar  <- 102191  #Aqui poner la propia semilla
 #------------------------------------------------------------------------------
@@ -43,15 +43,15 @@ ksemilla_azar  <- 102191  #Aqui poner la propia semilla
 get_experimento  <- function()
 {
   if( !file.exists( "./maestro.yaml" ) )  cat( file="./maestro.yaml", "experimento: 1000" )
-
+  
   exp  <- read_yaml( "./maestro.yaml" )
   experimento_actual  <- exp$experimento
-
+  
   exp$experimento  <- as.integer(exp$experimento + 1)
   Sys.chmod( "./maestro.yaml", mode = "0644", use_umask = TRUE)
   write_yaml( exp, "./maestro.yaml" )
   Sys.chmod( "./maestro.yaml", mode = "0444", use_umask = TRUE) #dejo el archivo readonly
-
+  
   return( experimento_actual )
 }
 #------------------------------------------------------------------------------
@@ -62,20 +62,20 @@ loguear  <- function( reg, arch=NA, folder="./work/", ext=".txt", verbose=TRUE )
 {
   archivo  <- arch
   if( is.na(arch) )  archivo  <- paste0(  folder, substitute( reg), ext )
-
+  
   if( !file.exists( archivo ) )  #Escribo los titulos
   {
     linea  <- paste0( "fecha\t", 
                       paste( list.names(reg), collapse="\t" ), "\n" )
-
+    
     cat( linea, file=archivo )
   }
-
+  
   linea  <- paste0( format(Sys.time(), "%Y%m%d %H%M%S"),  "\t",     #la fecha y hora
                     gsub( ", ", "\t", toString( reg ) ),  "\n" )
-
+  
   cat( linea, file=archivo, append=TRUE )  #grabo al archivo
-
+  
   if( verbose )  cat( linea )   #imprimo por pantalla
 }
 #------------------------------------------------------------------------------
@@ -84,20 +84,20 @@ loguear  <- function( reg, arch=NA, folder="./work/", ext=".txt", verbose=TRUE )
 particionar  <- function( data, division, agrupa="", campo="fold", start=1, seed=NA )
 {
   if( !is.na( seed)  )   set.seed( seed )
-
+  
   bloque  <- unlist( mapply(  function(x,y) { rep( y, x ) }, division, seq( from=start, length.out=length(division) )  ) )
-
+  
   data[ , (campo) :=  sample( rep( bloque, ceiling(.N/length(bloque))) )[1:.N],
-           by= agrupa ]
+        by= agrupa ]
 }
 #------------------------------------------------------------------------------
 
 ranger_Simple  <- function( fold_test, pdata, param )
 {
   #genero el modelo
-
+  
   set.seed(ksemilla_azar)
-
+  
   modelo  <- ranger( formula= "clase_binaria ~ .",
                      data=  pdata[ fold!= fold_test], 
                      probability=   TRUE,  #para que devuelva las probabilidades
@@ -105,14 +105,14 @@ ranger_Simple  <- function( fold_test, pdata, param )
                      mtry=          param$mtry,
                      min.node.size= param$min.node.size,
                      max.depth=     param$max.depth
-                 )
-
+  )
+  
   prediccion  <- predict( modelo, pdata[ fold==fold_test] )
-
+  
   ganancia_testing  <- pdata[ fold==fold_test,
                               sum( (prediccion$predictions[ ,"POS" ] > 0.025) *
-                                    ifelse( clase_binaria=="POS", 48750, -1250)  ) ]
-
+                                     ifelse( clase_binaria=="POS", 48750, -1250)  ) ]
+  
   return( ganancia_testing )
 }
 #------------------------------------------------------------------------------
@@ -121,13 +121,13 @@ ranger_CrossValidation  <- function( data, param, pcampos_buenos, qfolds, pagrup
 {
   divi  <- rep( 1, qfolds )
   particionar( data, divi, seed=semilla, agrupa=pagrupa )
-
+  
   ganancias  <- mcmapply( ranger_Simple, 
                           seq(qfolds), # 1 2 3 4 5  
                           MoreArgs= list( data, param), 
                           SIMPLIFY= FALSE,
                           mc.cores= 1 )   #dejar esto en  1, porque ranger ya corre en paralelo
-
+  
   data[ , fold := NULL ]
   #devuelvo la primer ganancia y el promedio
   return( mean( unlist( ganancias )) *  qfolds )   #aqui normalizo la ganancia
@@ -138,52 +138,52 @@ ranger_CrossValidation  <- function( data, param, pcampos_buenos, qfolds, pagrup
 
 EstimarGanancia_ranger  <- function( x )
 {
-   GLOBAL_iteracion  <<-  GLOBAL_iteracion + 1
-
-   xval_folds  <- 5
-   ganancia  <- ranger_CrossValidation( dataset, 
-                                        param= x,
-                                        qfolds= xval_folds, 
-                                        pagrupa= "clase_binaria", 
-                                        semilla= ksemilla_azar )
-
-   #si tengo una ganancia superadora, genero el archivo para Kaggle
-   if(  ganancia > GLOBAL_ganancia_max )
-   {
-     GLOBAL_ganancia_max  <<- ganancia  #asigno la nueva maxima ganancia
-
-     set.seed(ksemilla_azar)
-
-     modelo  <- ranger( formula= "clase_binaria ~ .",
-                        data=  dataset, 
-                        probability=   TRUE,  #para que devuelva las probabilidades
-                        num.trees=     x$num.trees,
-                        mtry=          x$mtry,
-                        min.node.size= x$min.node.size,
-                        max.depth=     x$max.depth
-                      )
-
-     prediccion  <- predict( modelo, dapply )
-
-     Predicted  <- as.integer( prediccion$predictions[ ,"POS" ] > 0.025 )
-
-     entrega  <- as.data.table( list( "numero_de_cliente"=dapply$numero_de_cliente, 
-                                      "Predicted"= Predicted)  )
-
-     #genero el archivo para Kaggle
-     fwrite( entrega, 
-             file= paste0(kkaggle, GLOBAL_iteracion, ".csv" ),
-             sep=  "," )
-   }
-
-   #logueo 
-   xx  <- x
-   xx$xval_folds  <-  xval_folds
-   xx$ganancia  <- ganancia
-   loguear( xx,  arch= klog )
-
-
-   return( ganancia )
+  GLOBAL_iteracion  <<-  GLOBAL_iteracion + 1
+  
+  xval_folds  <- 5
+  ganancia  <- ranger_CrossValidation( dataset, 
+                                       param= x,
+                                       qfolds= xval_folds, 
+                                       pagrupa= "clase_binaria", 
+                                       semilla= ksemilla_azar )
+  
+  #si tengo una ganancia superadora, genero el archivo para Kaggle
+  if(  ganancia > GLOBAL_ganancia_max )
+  {
+    GLOBAL_ganancia_max  <<- ganancia  #asigno la nueva maxima ganancia
+    
+    set.seed(ksemilla_azar)
+    
+    modelo  <- ranger( formula= "clase_binaria ~ .",
+                       data=  dataset, 
+                       probability=   TRUE,  #para que devuelva las probabilidades
+                       num.trees=     x$num.trees,
+                       mtry=          x$mtry,
+                       min.node.size= x$min.node.size,
+                       max.depth=     x$max.depth
+    )
+    
+    prediccion  <- predict( modelo, dapply )
+    
+    Predicted  <- as.integer( prediccion$predictions[ ,"POS" ] > 0.025 )
+    
+    entrega  <- as.data.table( list( "numero_de_cliente"=dapply$numero_de_cliente, 
+                                     "Predicted"= Predicted)  )
+    
+    #genero el archivo para Kaggle
+    fwrite( entrega, 
+            file= paste0(kkaggle, GLOBAL_iteracion, ".csv" ),
+            sep=  "," )
+  }
+  
+  #logueo 
+  xx  <- x
+  xx$xval_folds  <-  xval_folds
+  xx$ganancia  <- ganancia
+  loguear( xx,  arch= klog )
+  
+  
+  return( ganancia )
 }
 #------------------------------------------------------------------------------
 #Aqui empieza el programa
@@ -201,19 +201,20 @@ GLOBAL_iteracion  <- 0
 
 if( file.exists(klog) )
 {
- tabla_log  <- fread( klog)
- GLOBAL_iteracion  <- nrow( tabla_log ) -1
- GLOBAL_ganancia_max  <-  tabla_log[ , max(ganancia) ]
+  tabla_log  <- fread( klog)
+  GLOBAL_iteracion  <- nrow( tabla_log ) -1
+  GLOBAL_ganancia_max  <-  tabla_log[ , max(ganancia) ]
 }
 
 
 #cargo el datset donde voy a entrenar
 dataset  <- fread(karch_generacion, stringsAsFactors= TRUE)   #donde entreno
-
+dataset[ , mpasivos_margen := NULL ]
+dataset[ , mactivos_margen := NULL ]
 dataset[ , clase_binaria := as.factor(ifelse( clase_ternaria=="BAJA+2", "POS", "NEG" )) ]
 dataset[ , clase_ternaria := NULL ]  #elimino la clase_ternaria, ya no la necesito
 #imputo los nulos, ya que ranger no acepta nulos
-#Leo Breiman, Â¿por que le temias a los nulos?
+#Leo Breiman, ¿por que le temias a los nulos?
 dataset  <- na.roughfix( dataset )
 
 
@@ -233,12 +234,12 @@ funcion_optimizar  <- EstimarGanancia_ranger
 #configuro la busqueda bayesiana,  los hiperparametros que se van a optimizar
 #por favor, no desesperarse por lo complejo
 obj.fun  <- makeSingleObjectiveFunction(
-              fn=       funcion_optimizar,
-              minimize= FALSE,   #estoy Maximizando la ganancia
-              noisy=    TRUE,
-              par.set=  hs,
-              has.simple.signature = FALSE
-             )
+  fn=       funcion_optimizar,
+  minimize= FALSE,   #estoy Maximizando la ganancia
+  noisy=    TRUE,
+  par.set=  hs,
+  has.simple.signature = FALSE
+)
 
 ctrl  <- makeMBOControl( save.on.disk.at.time= 600,  save.file.path= kbayesiana)
 ctrl  <- setMBOControlTermination(ctrl, iters= kBO_iter )
@@ -252,6 +253,4 @@ if(!file.exists(kbayesiana)) {
 } else  run  <- mboContinue( kbayesiana )   #retomo en caso que ya exista
 
 
-quit( save="no" )
-
-
+#quit( save="no" )
