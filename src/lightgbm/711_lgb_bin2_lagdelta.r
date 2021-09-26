@@ -32,7 +32,7 @@ require("mlrMBO")
 #para poder usarlo en la PC y en la nube sin tener que cambiar la ruta
 #cambiar aqui las rutas en su maquina
 switch ( Sys.info()[['sysname']],
-         Windows = { directory.root  <-  "M:\\" },   #Windows
+         Windows = { directory.root  <-  "C:/Users/marcos.portaro/Google Drive/Data.Science/ITBA/05-Data.Mining/dm2021b/" },   #Windows
          Darwin  = { directory.root  <-  "~/dm/" },  #Apple MAC
          Linux   = { directory.root  <-  "~/buckets/b1/" } #Google Cloud
        )
@@ -63,9 +63,21 @@ hs <- makeParamSet(
          makeNumericParam("prob_corte",       lower=    0.040, upper=    0.055)
         )
 
-campos_malos  <- c( "mpasivos_margen" )   #aqui se deben cargar todos los campos culpables del Data Drifting
+campos_malos  <- c( "mactivos_margen", "mpasivos_margen", "mcuentas_saldo", "Master_Finiciomora",
+                    "Master_mconsumospesos", "Master_mconsumototal", "Visa_mconsumospesos",
+                    "Visa_mpagominimo", "Master_mfinanciacion_limite", "Visa_mfinanciacion_limite",
+                    "Visa_msaldototal", "Visa_msaldopesos", "mrentabilidad",
+                    "mcomisiones", "mtarjeta_visa_consumo", "mpayroll",
+                    "Visa_mconsumototal", "ccuenta_debitos_automaticos", "cpagomiscuentas",
+                    "ctransferencias_recibidas", "Visa_mpagosdolares", "mcaja_ahorro_dolares",
+                    "mcuenta_debitos_automaticos", "mpagomiscuentas",
+                    "mtarjeta_master_descuentos", "mtransferencias_recibidas",
+                    "mcheques_depositados", "mcheques_depositados_rechazados",
+                    "Visa_fultimo_cierre", "mcajeros_propios_descuentos",
+                    "mtarjeta_visa_descuentos" 
+                    )   #aqui se deben cargar todos los campos culpables del Data Drifting
 
-ksemilla_azar  <- 102191  #Aqui poner la propia semilla
+ksemilla_azar  <- 320009  #Aqui poner la propia semilla
 #------------------------------------------------------------------------------
 #Funcion que lleva el registro de los experimentos
 
