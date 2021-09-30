@@ -11,7 +11,7 @@ require("data.table")
 
 
 #Establezco el Working Directory
-setwd( "~/buckets/b1/crudo" )
+setwd( "~/buckets/b1/" )
 
 
 EnriquecerDataset <- function( dataset , arch_destino )
@@ -77,6 +77,36 @@ EnriquecerDataset <- function( dataset , arch_destino )
   dataset[ , mvr_mconsumototal       := mv_mconsumototal  / mv_mlimitecompra ]
   dataset[ , mvr_mpagominimo         := mv_mpagominimo  / mv_mlimitecompra ]
 
+  #Normalizacion de las variables mas importantes
+  dataset[,ctrx_quarter:=scale(ctrx_quarter, center = TRUE, scale = TRUE)]
+  dataset[,cpayroll_trx:=scale(ctrx_quarter, center = TRUE, scale = TRUE)]
+  dataset[,mpasivos_margen:=scale(ctrx_quarter, center = TRUE, scale = TRUE)]
+  dataset[,ctarjeta_visa_transacciones:=scale(ctrx_quarter, center = TRUE, scale = TRUE)]
+  dataset[,mcaja_ahorro:=scale(ctrx_quarter, center = TRUE, scale = TRUE)]
+  dataset[,mpayroll:=scale(ctrx_quarter, center = TRUE, scale = TRUE)]
+  dataset[,mcuentas_saldo:=scale(ctrx_quarter, center = TRUE, scale = TRUE)]
+  dataset[,mtarjeta_visa_consumo:=scale(ctrx_quarter, center = TRUE, scale = TRUE)]
+  dataset[,mprestamos_personales:=scale(ctrx_quarter, center = TRUE, scale = TRUE)]
+  dataset[,mrentabilidad_annual:=scale(ctrx_quarter, center = TRUE, scale = TRUE)]
+  dataset[,Visa_mpagominimo:=scale(ctrx_quarter, center = TRUE, scale = TRUE)]
+  dataset[,Visa_msaldototal:=scale(ctrx_quarter, center = TRUE, scale = TRUE)]
+  dataset[,thomebanking:=scale(ctrx_quarter, center = TRUE, scale = TRUE)]
+  dataset[,Visa_msaldopesos:=scale(ctrx_quarter, center = TRUE, scale = TRUE)]
+  dataset[,Master_fechaalta:=scale(ctrx_quarter, center = TRUE, scale = TRUE)]
+  dataset[,mrentabilidad:=scale(ctrx_quarter, center = TRUE, scale = TRUE)]
+  dataset[,chomebanking_transacciones:=scale(ctrx_quarter, center = TRUE, scale = TRUE)]
+  dataset[,mcomisiones_otras:=scale(ctrx_quarter, center = TRUE, scale = TRUE)]
+  dataset[,cproductos:=scale(ctrx_quarter, center = TRUE, scale = TRUE)]
+  dataset[,mtransferencias_recibidas:=scale(ctrx_quarter, center = TRUE, scale = TRUE)]
+  dataset[,Visa_fechaalta:=scale(ctrx_quarter, center = TRUE, scale = TRUE)]
+  dataset[,cliente_edad:=scale(ctrx_quarter, center = TRUE, scale = TRUE)]
+  dataset[,Visa_Fvencimiento:=scale(ctrx_quarter, center = TRUE, scale = TRUE)]
+  dataset[,mpasivos_margen:=scale(ctrx_quarter, center = TRUE, scale = TRUE)]
+  dataset[,ccuenta_debitos_automaticos:=scale(ctrx_quarter, center = TRUE, scale = TRUE)]
+  dataset[,mplazo_fijo_dolares:=scale(ctrx_quarter, center = TRUE, scale = TRUE)]
+  dataset[,Master_status:=scale(ctrx_quarter, center = TRUE, scale = TRUE)]
+  
+  
   #valvula de seguridad para evitar valores infinitos
   #paso los infinitos a NULOS
   infinitos      <- lapply(names(dataset),function(.name) dataset[ , sum(is.infinite(get(.name)))])
