@@ -32,7 +32,7 @@ require("mlrMBO")
 #para poder usarlo en la PC y en la nube sin tener que cambiar la ruta
 #cambiar aqui las rutas en su maquina
 switch ( Sys.info()[['sysname']],
-         Windows = { directory.root  <-  "M:\\" },   #Windows
+         Windows = { directory.root  <-  "C:/Users/marcos.portaro/Google Drive/Data.Science/ITBA/05-Data.Mining/" },   #Windows
          Darwin  = { directory.root  <-  "~/dm/" },  #Apple MAC
          Linux   = { directory.root  <-  "~/buckets/b1/" } #Google Cloud
        )
@@ -56,16 +56,17 @@ kBO_iter    <-  100   #cantidad de iteraciones de la Optimizacion Bayesiana
 
 #Aqui se cargan los hiperparametros
 hs <- makeParamSet( 
-         makeNumericParam("learning_rate",    lower=    0.02 , upper=    0.06),
-         makeNumericParam("feature_fraction", lower=    0.1  , upper=    0.4),
+         makeNumericParam("learning_rate",    lower=    0.015 , upper=    0.035),
+         makeNumericParam("feature_fraction", lower=    0.2  , upper=    0.4),
          makeIntegerParam("min_data_in_leaf", lower= 1000L   , upper= 8000L),
-         makeIntegerParam("num_leaves",       lower=  100L   , upper= 1024L),
-         makeNumericParam("prob_corte",       lower=    0.040, upper=    0.055)
+         makeIntegerParam("num_leaves",       lower=  700L   , upper= 1700L),
+         makeNumericParam("prob_corte",       lower=    0.035, upper=    0.050)
         )
 
-campos_malos  <- c( "mpasivos_margen" )   #aqui se deben cargar todos los campos culpables del Data Drifting
+campos_malos  <- c( "mcuenta_debitos_automaticos", "cpagomiscuentas", 
+		"mpagomiscuentas", "Master_mfinanciacion_limite" )   #aqui se deben cargar todos los campos culpables del Data Drifting
 
-ksemilla_azar  <- 102191  #Aqui poner la propia semilla
+ksemilla_azar  <- 320009  #Aqui poner la propia semilla
 #------------------------------------------------------------------------------
 #Funcion que lleva el registro de los experimentos
 
