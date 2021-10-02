@@ -101,7 +101,7 @@ EnriquecerDataset <- function( dataset , arch_destino )
   dataset[ , new_DebitosPorTransaccion := mautoservicio/ctarjeta_debito_transacciones]
   dataset[ , new_mPrestamosTotal := rowSums( cbind( mprestamos_personales, mprestamos_prendarios, mprestamos_hipotecarios) , na.rm=TRUE ) ]
   dataset[ , new_cPrestamosTotal := rowSums( cbind( cprestamos_personales, cprestamos_prendarios, cprestamos_hipotecarios) , na.rm=TRUE ) ]
-  dataset[ , new_PrestamosUnidad := new_mPrestamosTotal/new_cPrestamosTotal ) ]
+  dataset[ , new_PrestamosUnidad := new_mPrestamosTotal/new_cPrestamosTotal ]
   dataset[ , new_SaldovsComision := mcuentas_saldo/mcomisiones_mantenimiento] # Relacion Saldos cuentas y comisiones
   dataset[ , new_MOvCajerosPropvsNoProp := (matm/catm_trx)/(matm_other/catm_trx_other)] # Relacion Saldos y cantidad cajeros propios y no propios
   dataset[ , new_Visa_limiteConsumido := Visa_mconsumototal / Visa_mlimitecompra]
