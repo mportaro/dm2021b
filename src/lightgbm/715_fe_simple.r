@@ -19,6 +19,11 @@ require("data.table")
 #Establezco el Working Directory
 setwd( "~/buckets/b1/" )
 
+#Defino funcion Scaling entre 0 y 1
+fun_range <- function (x) {
+x-min(x)/(max(x)-min(x))
+}
+
 
 EnriquecerDataset <- function( dataset , arch_destino )
 {
@@ -82,6 +87,40 @@ EnriquecerDataset <- function( dataset , arch_destino )
   dataset[ , mvr_mpagosdolares       := mv_mpagosdolares / mv_mlimitecompra ]
   dataset[ , mvr_mconsumototal       := mv_mconsumototal  / mv_mlimitecompra ]
   dataset[ , mvr_mpagominimo         := mv_mpagominimo  / mv_mlimitecompra ]
+
+# NEW FEATURES --------------------------
+  dataset[ , new_cpayroll := cpayroll_trx > 0] # Aporte del empleador TRUE/FALSE
+  dataset[ , new_cuenta_debitos_automaticos := mcuenta_debitos_automaticos/ccuenta_debitos_automaticos] # Monto Debitos automaticos por transaccion
+  dataset[ , new_tarjeta_visa_debitos_automaticos := ctarjeta_visa_debitos_automaticos > 0] # Debitos automaticos en Visa TRUE/FALSE 
+  dataset[ , new_SaldoBajo := ifelse(mcaja_ahorro < (sum(mcaja_ahorro)/length(mcaja_ahorro))*.05, 1, 0)] # Clientes con saldo promedio bajo
+  dataset[ , new_tenencia := rowSums(cbind(mcuenta_corriente, mcuenta_corriente_adicional, mcaja_ahorro, mcaja_ahorro_adicional), 
+					na.rm=TRUE )] # Tenencia caja de ahorro y cuenta corriente en pesos
+  dataset[ , new_CuentasMVSaldo := mcuentas_saldo/mv_msaldototal] # Relacion Saldos cuentas y tarjetas
+  dataset[ , new_VisaLimiteConsumidoPesos := Visa_mconsumospesos / Visa_mlimitecompra]
+  dataset[ , new_MasterLimiteConsumidoPesos := Master_mconsumospesos / Master_mlimitecompra] 
+  dataset[ , new_DebitosPorTransaccion := mautoservicio/ctarjeta_debito_transacciones]
+  dataset[ , new_mPrestamosTotal := rowSums( cbind( mprestamos_personales, mprestamos_prendarios, mprestamos_hipotecarios) , na.rm=TRUE ) ]
+  dataset[ , new_cPrestamosTotal := rowSums( cbind( cprestamos_personales, cprestamos_prendarios, cprestamos_hipotecarios) , na.rm=TRUE ) ]
+  dataset[ , new_PrestamosUnidad := new_mPrestamosTotal/new_cPrestamosTotal ) ]
+  dataset[ , new_SaldovsComision := mcuentas_saldo/mcomisiones_mantenimiento] # Relacion Saldos cuentas y comisiones
+  dataset[ , new_MOvCajerosPropvsNoProp := (matm/catm_trx)/(matm_other/catm_trx_other)] # Relacion Saldos y cantidad cajeros propios y no propios
+  dataset[ , new_Visa_limiteConsumido := Visa_mconsumototal / Visa_mlimitecompra]
+  dataset[ , new_Master_limiteConsumido := Master_mconsumototal / Master_mlimitecompra]
+  dataset[ , new_Saldo_MVlimitecompra := mcuentas_saldo/mv_mlimitecompra] # Relacion Saldo en Cuentas y Limite de compra tarjetas
+  dataset[ , new_VisaPagosDiasAlta := Visa_mpagospesos/Visa_fechaalta]
+  dataset[ , new_mactivosZscore := scale(mactivos_margen, center = TRUE, scale = TRUE)] #Normalizacion
+  dataset[ , new_mpasivosZscore := scale(mpasivos_margen, center = TRUE, scale = TRUE)] #Normalizacion
+  dataset[ , new_cliente_antiguedadZscore := scale(cliente_antiguedad, center = TRUE, scale = TRUE)] #Normalizacion
+  dataset[ , new_mtarjeta_visa_consumoZscore := scale(mtarjeta_visa_consumo, center = TRUE, scale = TRUE)] #Normalizacion
+  dataset[ , new_mcaja_ahorroZscore := scale(mcaja_ahorro, center = TRUE, scale = TRUE)] #Normalizacion
+  dataset[ , new_ctrx_quarterLog:= log(ctrx_quarter+1)] #Log Transformation
+  dataset[ , new_Visa_mfinanciacion_limiteLog:= log(Visa_mfinanciacion_limite+1)] #Log Transformation
+  dataset[ , new_Visa_msaldopesosLog:= log(Visa_msaldopesos+1)] #Log Transformation  
+  dataset[ , new_Visa_msaldototalLog:= log(Visa_msaldototal+1)] #Log Transformation  
+  dataset[ , new_Visa_mlimitecompraLog:= log(Visa_mlimitecompra+1)] #Log Transformation  
+  dataset[ , new_Visa_mpagospesosLog:= log(Visa_mpagospesos+1)] #Log Transformation  
+  dataset[ , new_Visa_cconsumosLog:= log(Visa_cconsumos+1)] #Log Transformation
+# --------------------------------
 
   #valvula de seguridad para evitar valores infinitos
   #paso los infinitos a NULOS
