@@ -56,11 +56,11 @@ kBO_iter    <-  100   #cantidad de iteraciones de la Optimizacion Bayesiana
 
 #Aqui se cargan los hiperparametros
 hs <- makeParamSet( 
-         makeNumericParam("learning_rate",    lower=    0.02 , upper=    0.06),
+         makeNumericParam("learning_rate",    lower=    0.015 , upper=    0.06),
          makeNumericParam("feature_fraction", lower=    0.1  , upper=    0.4),
-         makeIntegerParam("min_data_in_leaf", lower= 1000L   , upper= 8000L),
-         makeIntegerParam("num_leaves",       lower=  100L   , upper= 1024L),
-         makeNumericParam("prob_corte",       lower=    0.040, upper=    0.055)
+         makeIntegerParam("min_data_in_leaf", lower= 2000L   , upper= 8000L),
+         makeIntegerParam("num_leaves",       lower=  500L   , upper= 1500L),
+         makeNumericParam("prob_corte",       lower=    0.035, upper=    0.050)
         )
 
 campos_malos  <- c("mcuenta_debitos_automaticos", "cpagomiscuentas", 
