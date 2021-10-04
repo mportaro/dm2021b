@@ -35,15 +35,14 @@ dataset[ foto_mes==201806,  tcallcenter   :=  NA ]
 dataset[ foto_mes==201806,  ccallcenter_transacciones   :=  NA ]
 
 dataset[ foto_mes==201904,  ctarjeta_visa_debitos_automaticos  :=  NA ]
-dataset[ foto_mes==201904,  mttarjeta_visa_debitos_automaticos := NA ]
-dataset[ foto_mes==201904,  Visa_mfinanciacion_limite := NA ]
+dataset[ foto_mes==201904,  mtarjeta_visa_debitos_automaticos := NA ]
+dataset[ foto_mes==202006,  Visa_mfinanciacion_limite := NA ]
 
 dataset[ foto_mes==201905,  mrentabilidad     := NA ]
 dataset[ foto_mes==201905,  mrentabilidad_annual     := NA ]
 dataset[ foto_mes==201905,  mcomisiones      := NA ]
 dataset[ foto_mes==201905,  mpasivos_margen  := NA ]
 dataset[ foto_mes==201905,  mactivos_margen  := NA ]
-dataset[ foto_mes==201905,  ctarjeta_visa_debitos_automaticos  := NA ]
 dataset[ foto_mes==201905,  ccomisiones_otras := NA ]
 dataset[ foto_mes==201905,  mcomisiones_otras := NA ]
 
@@ -63,7 +62,18 @@ dataset[ foto_mes==201910,  ccajeros_propios_descuentos := NA ]
 dataset[ foto_mes==201910,  mcajeros_propios_descuentos := NA ]
 
 dataset[ foto_mes==202001,  cliente_vip   := NA ]
+dataset[ foto_mes==202001,  ctarjeta_visa_descuentos    := NA ]
+dataset[ foto_mes==202001,  mtarjeta_visa_descuentos    := NA ]
+dataset[ foto_mes==202001,  ctarjeta_master_descuentos    := NA ]
+dataset[ foto_mes==202001,  mtarjeta_master_descuentos    := NA ]
 
+dataset[ foto_mes==202002,  ccajeros_propios_descuentos := NA ]
+dataset[ foto_mes==202002,  mcajeros_propios_descuentos := NA ]
+
+dataset[ foto_mes==202006,  ctarjeta_visa_descuentos    := NA ]
+dataset[ foto_mes==202006,  mtarjeta_visa_descuentos    := NA ]
+dataset[ foto_mes==202006,  ctarjeta_master_descuentos    := NA ]
+dataset[ foto_mes==202006,  mtarjeta_master_descuentos    := NA ]
 dataset[ foto_mes==202006,  active_quarter   := NA ]
 dataset[ foto_mes==202006,  internet   := NA ]
 dataset[ foto_mes==202006,  mrentabilidad   := NA ]
@@ -106,6 +116,24 @@ dataset[ foto_mes==202006,  matm_other   := NA ]
 dataset[ foto_mes==202006,  ctrx_quarter   := NA ]
 dataset[ foto_mes==202006,  tmobile_app   := NA ]
 dataset[ foto_mes==202006,  cmobile_app_trx   := NA ]
+dataset[ foto_mes==202006,  ccajeros_propios_descuentos := NA ]
+dataset[ foto_mes==202006,  mcajeros_propios_descuentos := NA ]
+
+dataset[ foto_mes==202009,  ctarjeta_visa_descuentos    := NA ]
+dataset[ foto_mes==202010,  ctarjeta_visa_descuentos    := NA ]
+dataset[ foto_mes==202009,  mtarjeta_visa_descuentos    := NA ]
+dataset[ foto_mes==202010,  mtarjeta_visa_descuentos    := NA ]
+
+dataset[ foto_mes==202009,  ctarjeta_master_descuentos    := NA ]
+dataset[ foto_mes==202010,  ctarjeta_master_descuentos    := NA ]
+dataset[ foto_mes==202009,  mtarjeta_master_descuentos    := NA ]
+dataset[ foto_mes==202010,  mtarjeta_master_descuentos    := NA ]
+
+dataset[ foto_mes==202009,  ccajeros_propios_descuentos := NA ]
+dataset[ foto_mes==202010,  mcajeros_propios_descuentos := NA ]
+
+dataset[ foto_mes==202010,  ccajeros_propios_descuentos := NA ]
+dataset[ foto_mes==202009,  mcajeros_propios_descuentos := NA ]
 
 
 dataset[ foto_mes==202010,  internet  := NA ]
@@ -113,11 +141,24 @@ dataset[ foto_mes==202011,  internet  := NA ]
 dataset[ foto_mes==202012,  internet  := NA ]
 dataset[ foto_mes==202101,  internet  := NA ]
 
-dataset[ foto_mes==202009,  tmobile_app  := NA ]
+dataset[ foto_mes==202006,  tmobile_app  := NA ]
 dataset[ foto_mes==202010,  tmobile_app  := NA ]
 dataset[ foto_mes==202011,  tmobile_app  := NA ]
 dataset[ foto_mes==202012,  tmobile_app  := NA ]
 dataset[ foto_mes==202101,  tmobile_app  := NA ]
+
+dataset[ foto_mes>=201801 & foto_mes<=201905,  ctransferencias_recibidas  := NA ]
+dataset[ foto_mes>=201801 & foto_mes<=201905,  mtransferencias_recibidas  := NA ]
+
+dataset[ foto_mes==201802,  Master_fultimo_cierre  := NA ]
+dataset[ foto_mes==201810,  Master_fultimo_cierre  := NA ]
+dataset[ foto_mes==201907,  Master_fultimo_cierre  := NA ]
+dataset[ foto_mes==202009,  Master_fultimo_cierre  := NA ]
+
+dataset[ foto_mes==201802,  Visa_fultimo_cierre  := NA ]
+dataset[ foto_mes==201810,  Visa_fultimo_cierre  := NA ]
+dataset[ foto_mes==201907,  Visa_fultimo_cierre  := NA ]
+dataset[ foto_mes==202009,  Visa_fultimo_cierre  := NA ]
 
 #grabo con nombre extendido
 fwrite( dataset,

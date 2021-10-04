@@ -120,6 +120,9 @@ EnriquecerDataset <- function( dataset , arch_destino )
   dataset[ , new_Visa_mlimitecompraLog:= log(Visa_mlimitecompra+1)] #Log Transformation  
   dataset[ , new_Visa_mpagospesosLog:= log(Visa_mpagospesos+1)] #Log Transformation  
   dataset[ , new_Visa_cconsumosLog:= log(Visa_cconsumos+1)] #Log Transformation
+  dataset[ , new_Master_status_Factor:= as.factor(Master_status)] #Factor conversion
+  dataset[ , new_thomebanking_Factor:= as.factor(thomebanking)] #Factor conversion
+
 # --------------------------------
 
   #valvula de seguridad para evitar valores infinitos
