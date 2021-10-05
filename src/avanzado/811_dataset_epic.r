@@ -321,7 +321,7 @@ AgregarVariables  <- function( dataset )
 
 # NEW FEATURES --------------------------
   dataset[ , new_cpayroll := cpayroll_trx > 0] # Aporte del empleador TRUE/FALSE
-  dataset[ , new_cuenta_debitos_automaticos := mcuenta_debitos_automaticos/ccuenta_debitos_automaticos] # Monto Debitos automaticos por transaccion
+  #dataset[ , new_cuenta_debitos_automaticos := mcuenta_debitos_automaticos/ccuenta_debitos_automaticos] # Monto Debitos automaticos por transaccion
   dataset[ , new_tarjeta_visa_debitos_automaticos := ctarjeta_visa_debitos_automaticos > 0] # Debitos automaticos en Visa TRUE/FALSE 
   dataset[ , new_SaldoBajo := ifelse(mcaja_ahorro < (sum(mcaja_ahorro)/length(mcaja_ahorro))*.05, 1, 0)] # Clientes con saldo promedio bajo
   dataset[ , new_tenencia := rowSums(cbind(mcuenta_corriente, mcuenta_corriente_adicional, mcaja_ahorro, mcaja_ahorro_adicional), 
