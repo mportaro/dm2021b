@@ -22,10 +22,9 @@ setwd( directory.root )
 
 palancas  <- list()  #variable con las palancas para activar/desactivar
 
-palancas$version  <- "v003"   #Muy importante, ir cambiando la version
+palancas$version  <- "v004"   #Muy importante, ir cambiando la version
 
-palancas$variablesdrift  <- c("mcuenta_debitos_automaticos", "cpagomiscuentas", 
-                   "mpagomiscuentas", "Master_mfinanciacion_limite")   #aqui van las columnas que se quieren eliminar
+palancas$variablesdrift  <- c()   #aqui van las columnas que se quieren eliminar
 
 palancas$corregir <-  TRUE    # TRUE o FALSE
 
@@ -37,7 +36,7 @@ palancas$lag1   <- TRUE    #lag de orden 1
 palancas$delta1 <- FALSE    # campo -  lag de orden 1 
 palancas$lag2   <- TRUE
 palancas$delta2 <- FALSE
-palancas$lag3   <- TRUE
+palancas$lag3   <- FALSE
 palancas$delta3 <- FALSE
 palancas$lag4   <- FALSE
 palancas$delta4 <- FALSE
@@ -58,7 +57,7 @@ palancas$maximo6  <- FALSE
 palancas$ratiomax3   <- FALSE   #La idea de Daiana Sparta
 palancas$ratiomean6  <- FALSE   #Un derivado de la idea de Daiana Sparta
 
-palancas$tendencia6  <- TRUE    #Great power comes with great responsability
+palancas$tendencia6  <- FALSE    #Great power comes with great responsability
 
 
 palancas$canaritosimportancia  <- TRUE  #si me quedo solo con lo mas importante de canaritosimportancia
@@ -321,7 +320,7 @@ AgregarVariables  <- function( dataset )
 
 # NEW FEATURES --------------------------
   dataset[ , new_cpayroll := cpayroll_trx > 0] # Aporte del empleador TRUE/FALSE
-  #dataset[ , new_cuenta_debitos_automaticos := mcuenta_debitos_automaticos/ccuenta_debitos_automaticos] # Monto Debitos automaticos por transaccion
+  # dataset[ , new_cuenta_debitos_automaticos := mcuenta_debitos_automaticos/ccuenta_debitos_automaticos] # Monto Debitos automaticos por transaccion
   dataset[ , new_tarjeta_visa_debitos_automaticos := ctarjeta_visa_debitos_automaticos > 0] # Debitos automaticos en Visa TRUE/FALSE 
   dataset[ , new_SaldoBajo := ifelse(mcaja_ahorro < (sum(mcaja_ahorro)/length(mcaja_ahorro))*.05, 1, 0)] # Clientes con saldo promedio bajo
   dataset[ , new_tenencia := rowSums(cbind(mcuenta_corriente, mcuenta_corriente_adicional, mcaja_ahorro, mcaja_ahorro_adicional), 
