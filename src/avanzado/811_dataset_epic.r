@@ -22,7 +22,7 @@ setwd( directory.root )
 
 palancas  <- list()  #variable con las palancas para activar/desactivar
 
-palancas$version  <- "v007"   #Muy importante, ir cambiando la version
+palancas$version  <- "v008"   #Muy importante, ir cambiando la version
 
 palancas$variablesdrift  <- c("mcuenta_debitos_automaticos", "cpagomiscuentas", "mpagomiscuentas", "Master_mfinanciacion_limite")   #aqui van las columnas que se quieren eliminar
 
@@ -36,7 +36,7 @@ palancas$lag1   <- TRUE #lag de orden 1
 palancas$delta1 <- FALSE #campo -  lag de orden 1 
 palancas$lag2   <- TRUE
 palancas$delta2 <- FALSE
-palancas$lag3   <- FALSE
+palancas$lag3   <- TRUE
 palancas$delta3 <- FALSE
 palancas$lag4   <- FALSE
 palancas$delta4 <- FALSE
@@ -343,6 +343,9 @@ AgregarVariables  <- function( dataset )
   dataset[ , new_cliente_antiguedadZscore := scale(cliente_antiguedad, center = TRUE, scale = TRUE)] #Normalizacion
   dataset[ , new_mtarjeta_visa_consumoZscore := scale(mtarjeta_visa_consumo, center = TRUE, scale = TRUE)] #Normalizacion
   dataset[ , new_mcaja_ahorroZscore := scale(mcaja_ahorro, center = TRUE, scale = TRUE)] #Normalizacion
+  dataset[ , new_mprestamos_personalesZscore := scale(mprestamos_personales, center = TRUE, scale = TRUE)] #Normalizacion
+  dataset[ , new_mcuentas_saldoZscore := scale(mcuentas_saldo, center = TRUE, scale = TRUE)] #Normalizacion
+
   dataset[ , new_ctrx_quarterLog:= log(ctrx_quarter+1)] #Log Transformation
   dataset[ , new_Visa_mfinanciacion_limiteLog:= log(Visa_mfinanciacion_limite+1)] #Log Transformation
   dataset[ , new_Visa_msaldopesosLog:= log(Visa_msaldopesos+1)] #Log Transformation  
@@ -350,6 +353,10 @@ AgregarVariables  <- function( dataset )
   dataset[ , new_Visa_mlimitecompraLog:= log(Visa_mlimitecompra+1)] #Log Transformation  
   dataset[ , new_Visa_mpagospesosLog:= log(Visa_mpagospesos+1)] #Log Transformation  
   dataset[ , new_Visa_cconsumosLog:= log(Visa_cconsumos+1)] #Log Transformation
+  dataset[ , new_cliente_edadLog:= log(cliente_edad+1)] #Log Transformation
+  dataset[ , new_mcomisionesLog:= log(mcomisiones+1)] #Log Transformation
+  dataset[ , new_ctarjeta_debito_transaccionesLog:= log(ctarjeta_debito_transacciones+1)] #Log Transformation  
+
   dataset[ , new_Master_status_Factor:= as.factor(Master_status)] #Factor conversion
   dataset[ , new_thomebanking_Factor:= as.factor(thomebanking)] #Factor conversion
 
