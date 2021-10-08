@@ -49,17 +49,17 @@ kexperimento  <- NA   #NA si se corre la primera vez, un valor concreto si es pa
 
 kscript         <- "822_epic"
 
-karch_dataset    <- "./datasets/dataset_epic_v010.csv.gz"
+karch_dataset    <- "./datasets/dataset_epic_v011.csv.gz"
 
 kapply_mes       <- c(202101)  #El mes donde debo aplicar el modelo
 
 ktest_mes_hasta  <- 202011  #Esto es lo que uso para testing (2011-2011)
-ktest_mes_desde  <- 202008
+ktest_mes_desde  <- 202011
 
 kgen_mes_hasta    <- 202011  #(202002-202011)
 kgen_mes_desde    <- 202002
 
-ktrain_mes_hasta    <- 202007  #Obvimente, solo puedo entrenar hasta 202011 (202001 - 202009)
+ktrain_mes_hasta    <- 202009  #Obvimente, solo puedo entrenar hasta 202011 (202001 - 202009)
 ktrain_mes_desde    <- 202001  
 
 ktrain_meses_malos  <- c( 202006 )  #meses que quiero excluir del entrenamiento

@@ -22,7 +22,7 @@ setwd( directory.root )
 
 palancas  <- list()  #variable con las palancas para activar/desactivar
 
-palancas$version  <- "v010"   #Muy importante, ir cambiando la version
+palancas$version  <- "v011"   #Muy importante, ir cambiando la version
 
 palancas$variablesdrift  <- c("mcuenta_debitos_automaticos", "cpagomiscuentas", "mpagomiscuentas", "Master_mfinanciacion_limite")   #aqui van las columnas que se quieren eliminar
 
@@ -42,7 +42,7 @@ palancas$lag4   <- FALSE
 palancas$delta4 <- FALSE
 palancas$lag5   <- FALSE
 palancas$delta5 <- FALSE
-palancas$lag6   <- FALSE
+palancas$lag6   <- TRUE
 palancas$delta6 <- FALSE
 
 palancas$promedio3  <- FALSE  #promedio  de los ultimos 3 meses
@@ -338,9 +338,7 @@ AgregarVariables  <- function( dataset )
   dataset[ , new_Master_limiteConsumido := Master_mconsumototal / Master_mlimitecompra]
   dataset[ , new_Saldo_MVlimitecompra := mcuentas_saldo/mv_mlimitecompra] # Relacion Saldo en Cuentas y Limite de compra tarjetas
   dataset[ , new_VisaPagosDiasAlta := Visa_mpagospesos/Visa_fechaalta]
-  dataset[ , new_mactivosZscore := scale(mactivos_margen, center = TRUE, scale = TRUE)] #Normalizacion
   dataset[ , new_mpasivosZscore := scale(mpasivos_margen, center = TRUE, scale = TRUE)] #Normalizacion
-  dataset[ , new_cliente_antiguedadZscore := scale(cliente_antiguedad, center = TRUE, scale = TRUE)] #Normalizacion
   dataset[ , new_mtarjeta_visa_consumoZscore := scale(mtarjeta_visa_consumo, center = TRUE, scale = TRUE)] #Normalizacion
   dataset[ , new_mcaja_ahorroZscore := scale(mcaja_ahorro, center = TRUE, scale = TRUE)] #Normalizacion
   dataset[ , new_mprestamos_personalesZscore := scale(mprestamos_personales, center = TRUE, scale = TRUE)] #Normalizacion
@@ -355,7 +353,9 @@ AgregarVariables  <- function( dataset )
   dataset[ , new_Visa_cconsumosLog:= log(Visa_cconsumos+1)] #Log Transformation
   dataset[ , new_cliente_edadLog:= log(cliente_edad+1)] #Log Transformation
   dataset[ , new_mcomisionesLog:= log(mcomisiones+1)] #Log Transformation
-  #dataset[ , new_ctarjeta_debito_transaccionesLog:= log(ctarjeta_debito_transacciones+1)] #Log Transformation  
+  dataset[ , new_cliente_antiguedadLog := log(cliente_antiguedad+1)]
+  dataset[ , new_mactivosZscore := log(mactivos_margen + 1)]  
+#dataset[ , new_ctarjeta_debito_transaccionesLog:= log(ctarjeta_debito_transacciones+1)] #Log Transformation  
 
   #dataset[ , new_Master_status_Factor:= as.factor(Master_status)] #Factor conversion
   dataset[ , new_thomebanking_Factor:= as.factor(thomebanking)] #Factor conversion
