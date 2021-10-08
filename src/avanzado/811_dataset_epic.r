@@ -57,7 +57,7 @@ palancas$maximo6  <- FALSE
 palancas$ratiomax3   <- FALSE   #La idea de Daiana Sparta
 palancas$ratiomean6  <- FALSE   #Un derivado de la idea de Daiana Sparta
 
-palancas$tendencia4  <- TRUE    #Great power comes with great responsability
+palancas$tendencia3  <- TRUE    #Great power comes with great responsability
 
 
 palancas$canaritosimportancia  <- TRUE  #si me quedo solo con lo mas importante de canaritosimportancia
@@ -717,7 +717,7 @@ correr_todo  <- function( palancas )
   if(palancas$ratiomean6) RatioMean( dataset, cols_analiticas, 6) #Derivado de la idea de Daiana Sparta
 
 
-  if( palancas$tendencia6 )  Tendencia( dataset, cols_analiticas)
+  if( palancas$tendencia3 )  Tendencia( dataset, cols_analiticas)
 
 
   if( palancas$canaritosimportancia )  CanaritosImportancia( dataset )
