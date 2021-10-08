@@ -22,7 +22,7 @@ setwd( directory.root )
 
 palancas  <- list()  #variable con las palancas para activar/desactivar
 
-palancas$version  <- "v011"   #Muy importante, ir cambiando la version
+palancas$version  <- "v012"   #Muy importante, ir cambiando la version
 
 palancas$variablesdrift  <- c("mcuenta_debitos_automaticos", "cpagomiscuentas", "mpagomiscuentas", "Master_mfinanciacion_limite")   #aqui van las columnas que se quieren eliminar
 
@@ -34,9 +34,9 @@ palancas$dummiesNA  <-  FALSE #La idea de Santiago Dellachiesa
 
 palancas$lag1   <- TRUE #lag de orden 1
 palancas$delta1 <- FALSE #campo -  lag de orden 1 
-palancas$lag2   <- TRUE
+palancas$lag2   <- FALSE
 palancas$delta2 <- FALSE
-palancas$lag3   <- FALSE
+palancas$lag3   <- TRUE
 palancas$delta3 <- FALSE
 palancas$lag4   <- FALSE
 palancas$delta4 <- FALSE
@@ -57,7 +57,7 @@ palancas$maximo6  <- FALSE
 palancas$ratiomax3   <- FALSE   #La idea de Daiana Sparta
 palancas$ratiomean6  <- FALSE   #Un derivado de la idea de Daiana Sparta
 
-palancas$tendencia6  <- TRUE    #Great power comes with great responsability
+palancas$tendencia4  <- TRUE    #Great power comes with great responsability
 
 
 palancas$canaritosimportancia  <- TRUE  #si me quedo solo con lo mas importante de canaritosimportancia
@@ -354,7 +354,8 @@ AgregarVariables  <- function( dataset )
   dataset[ , new_cliente_edadLog:= log(cliente_edad+1)] #Log Transformation
   dataset[ , new_mcomisionesLog:= log(mcomisiones+1)] #Log Transformation
   dataset[ , new_cliente_antiguedadLog := log(cliente_antiguedad+1)]
-  dataset[ , new_mactivosZscore := log(mactivos_margen + 1)]  
+  dataset[ , new_mactivosZscore := log(mactivos_margen + 1)] 
+  dataset[ , new_mpayrollZscore := log(mpayroll + 1)]  
 #dataset[ , new_ctarjeta_debito_transaccionesLog:= log(ctarjeta_debito_transacciones+1)] #Log Transformation  
 
   #dataset[ , new_Master_status_Factor:= as.factor(Master_status)] #Factor conversion
@@ -553,13 +554,13 @@ Rcpp::cppFunction('NumericVector fhistC(NumericVector pcolumna, IntegerVector pd
 }')
 
 #------------------------------------------------------------------------------
-#calcula la tendencia de las variables cols de los ultimos 6 meses
+#calcula la tendencia de las variables cols de los ultimos 3 meses
 #la tendencia es la pendiente de la recta que ajusta por cuadrados minimos
 
 Tendencia  <- function( dataset, cols )
 {
   #Esta es la cantidad de meses que utilizo para la historia
-  ventana_regresion  <- 6
+  ventana_regresion  <- 3
 
   last  <- nrow( dataset )
 
