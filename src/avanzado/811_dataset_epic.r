@@ -22,7 +22,7 @@ setwd( directory.root )
 
 palancas  <- list()  #variable con las palancas para activar/desactivar
 
-palancas$version  <- "v013"   #Muy importante, ir cambiando la version
+palancas$version  <- "v014"   #Muy importante, ir cambiando la version
 
 palancas$variablesdrift  <- c()   #aqui van las columnas que se quieren eliminar
 
@@ -34,7 +34,7 @@ palancas$dummiesNA  <-  FALSE #La idea de Santiago Dellachiesa
 
 palancas$lag1   <- TRUE    #lag de orden 1
 palancas$delta1 <- FALSE    # campo -  lag de orden 1 
-palancas$lag2   <- TRUE
+palancas$lag2   <- FALSE
 palancas$delta2 <- FALSE
 palancas$lag3   <- FALSE
 palancas$delta3 <- FALSE
