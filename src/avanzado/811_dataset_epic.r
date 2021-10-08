@@ -22,9 +22,9 @@ setwd( directory.root )
 
 palancas  <- list()  #variable con las palancas para activar/desactivar
 
-palancas$version  <- "v012"   #Muy importante, ir cambiando la version
+palancas$version  <- "v013"   #Muy importante, ir cambiando la version
 
-palancas$variablesdrift  <- c("mcuenta_debitos_automaticos", "cpagomiscuentas", "mpagomiscuentas", "Master_mfinanciacion_limite")   #aqui van las columnas que se quieren eliminar
+palancas$variablesdrift  <- c()   #aqui van las columnas que se quieren eliminar
 
 palancas$corregir <-  TRUE    # TRUE o FALSE
 
@@ -32,17 +32,17 @@ palancas$nuevasvars <-  TRUE  #si quiero hacer Feature Engineering manual
 
 palancas$dummiesNA  <-  FALSE #La idea de Santiago Dellachiesa
 
-palancas$lag1   <- TRUE #lag de orden 1
-palancas$delta1 <- FALSE #campo -  lag de orden 1 
-palancas$lag2   <- FALSE
+palancas$lag1   <- TRUE    #lag de orden 1
+palancas$delta1 <- FALSE    # campo -  lag de orden 1 
+palancas$lag2   <- TRUE
 palancas$delta2 <- FALSE
-palancas$lag3   <- TRUE
+palancas$lag3   <- FALSE
 palancas$delta3 <- FALSE
 palancas$lag4   <- FALSE
 palancas$delta4 <- FALSE
 palancas$lag5   <- FALSE
 palancas$delta5 <- FALSE
-palancas$lag6   <- TRUE
+palancas$lag6   <- FALSE
 palancas$delta6 <- FALSE
 
 palancas$promedio3  <- FALSE  #promedio  de los ultimos 3 meses
@@ -57,7 +57,7 @@ palancas$maximo6  <- FALSE
 palancas$ratiomax3   <- FALSE   #La idea de Daiana Sparta
 palancas$ratiomean6  <- FALSE   #Un derivado de la idea de Daiana Sparta
 
-palancas$tendencia3  <- TRUE    #Great power comes with great responsability
+palancas$tendencia6  <- TRUE    #Great power comes with great responsability
 
 
 palancas$canaritosimportancia  <- TRUE  #si me quedo solo con lo mas importante de canaritosimportancia
@@ -494,11 +494,8 @@ Rcpp::cppFunction('NumericVector fhistC(NumericVector pcolumna, IntegerVector pd
   /* Aqui se cargan los valores para la regresion */
   double  x[100] ;
   double  y[100] ;
-
   int n = pcolumna.size();
   NumericVector out( n );
-
-
   //#if defined(_OPENMP)
   //#pragma omp parallel for
   //#endif
@@ -506,21 +503,17 @@ Rcpp::cppFunction('NumericVector fhistC(NumericVector pcolumna, IntegerVector pd
   {
     int  libre    = 0 ;
     int  xvalor   = 1 ;
-
     for( int j= pdesde[i]-1;  j<=i; j++ )
     {
        double a = pcolumna[j] ;
-
        if( !R_IsNA( a ) ) 
        {
           y[ libre ]= a ;
           x[ libre ]= xvalor ;
           libre++ ;
        }
-
        xvalor++ ;
     }
-
     /* Si hay al menos dos valores */
     if( libre > 1 )
     {
@@ -530,18 +523,15 @@ Rcpp::cppFunction('NumericVector fhistC(NumericVector pcolumna, IntegerVector pd
       double  xxsum = xsum * xsum ;
       double  vmin  = y[0] ;
       double  vmax  = y[0] ;
-
       for( int h=1; h<libre; h++)
       { 
         xsum  += x[h] ;
         ysum  += y[h] ; 
         xysum += x[h]*y[h] ;
         xxsum += x[h]*x[h] ;
-
         if( y[h] < vmin )  vmin = y[h] ;
         if( y[h] > vmax )  vmax = y[h] ;
       }
-
       out[ i ]  =  (libre*xysum - xsum*ysum)/(libre*xxsum -xsum*xsum) ;
     }
     else
@@ -549,18 +539,17 @@ Rcpp::cppFunction('NumericVector fhistC(NumericVector pcolumna, IntegerVector pd
       out[ i ]  =  NA_REAL ; 
     }
   }
-
   return  out;
 }')
 
 #------------------------------------------------------------------------------
-#calcula la tendencia de las variables cols de los ultimos 3 meses
+#calcula la tendencia de las variables cols de los ultimos 6 meses
 #la tendencia es la pendiente de la recta que ajusta por cuadrados minimos
 
 Tendencia  <- function( dataset, cols )
 {
   #Esta es la cantidad de meses que utilizo para la historia
-  ventana_regresion  <- 3
+  ventana_regresion  <- 6
 
   last  <- nrow( dataset )
 
@@ -717,7 +706,7 @@ correr_todo  <- function( palancas )
   if(palancas$ratiomean6) RatioMean( dataset, cols_analiticas, 6) #Derivado de la idea de Daiana Sparta
 
 
-  if( palancas$tendencia3 )  Tendencia( dataset, cols_analiticas)
+  if( palancas$tendencia6 )  Tendencia( dataset, cols_analiticas)
 
 
   if( palancas$canaritosimportancia )  CanaritosImportancia( dataset )
@@ -744,5 +733,3 @@ correr_todo( palancas )
 
 
 quit( save="no" )
-
-
