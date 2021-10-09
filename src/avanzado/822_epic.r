@@ -63,7 +63,7 @@ ktrain_mes_hasta    <- 202010  #Obvimente, solo puedo entrenar hasta 202011 (202
 ktrain_mes_desde    <- 202004  
 
 ktrain_meses_malos  <- c( 202006 )  #meses que quiero excluir del entrenamiento
-ktrain_subsampling  <- 0.2   #el subsampling que voy a hacer de los continua
+ktrain_subsampling  <- 0.5   #el subsampling que voy a hacer de los continua
 
 
 kBO_iter    <-  100   #cantidad de iteraciones de la Optimizacion Bayesiana
