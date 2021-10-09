@@ -49,7 +49,7 @@ kexperimento  <- NA   #NA si se corre la primera vez, un valor concreto si es pa
 
 kscript         <- "845_stacking"
 
-karch_dataset    <- "./datasets/stacking_v002.csv.gz"
+karch_dataset    <- "./datasets/stacking_v003.csv.gz"
 
 kapply_mes       <- c(202101)  #El mes donde debo aplicar el modelo
 
@@ -57,7 +57,7 @@ ktest_mes_hasta  <- 202011  #Esto es lo que uso para testing
 ktest_mes_desde  <- 202011
 
 ktrain_mes_hasta    <- 202009  #Obvimente, solo puedo entrenar hasta 202011
-ktrain_mes_desde    <- 202004  #Entreno desde Enero-2020
+ktrain_mes_desde    <- 202002  #Entreno desde Febrero-2020
 
 ktrain_meses_malos  <- c( 202006 )  #meses que quiero excluir del entrenamiento
 ktrain_subsampling  <- 1.0   #el subsampling que voy a hacer de los continua
@@ -73,7 +73,7 @@ hs <- makeParamSet(
          makeIntegerParam("num_leaves",       lower=  100L   , upper= 1024L)
         )
 
-campos_malos  <- c()   #aqui se deben cargar todos los campos culpables del Data Drifting
+campos_malos  <- c("mcuenta_debitos_automaticos", "cpagomiscuentas", "mpagomiscuentas", "Master_mfinanciacion_limite")   #aqui se deben cargar todos los campos culpables del Data Drifting
 
 ksemilla_azar  <- 102191  #Aqui poner la propia semilla
 #------------------------------------------------------------------------------
